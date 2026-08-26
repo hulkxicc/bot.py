@@ -205,10 +205,10 @@ admin_text = (
             f"👤 Telegram: {username}\n"
             f"*(Bu ovoz foydalanuvchining hamyoniga tushdi)*"
         )
-        bot.send_message(ADMIN_ID, admin_text, parse_mode="Markdown")
-        bot.forward_message(ADMIN_ID, chat_id, photo_1)
-        bot.forward_message(ADMIN_ID, chat_id, photo_2)
-        bot.forward_message(ADMIN_ID, chat_id, photo_3)
+bot.send_message(ADMIN_ID, admin_text, parse_mode="Markdown")
+bot.forward_message(ADMIN_ID, chat_id, photo_1)
+bot.forward_message(ADMIN_ID, chat_id, photo_2)
+bot.forward_message(ADMIN_ID, chat_id, photo_3)
 
 bot.send_message(
             chat_id, 
