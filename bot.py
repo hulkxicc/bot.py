@@ -196,7 +196,7 @@ try:
             conn.commit()
 except sqlite3.IntegrityError:
             bot.send_message(chat_id, "❌ Xatolik: Bu raqam allaqachon ro'yxatdan o'tgan!")
-return user_states.pop(chat_id, None)
+            return user_states.pop(chat_id, None)
 
 username = f"@{message.from_user.username}" if message.from_user.username else f"ID: {chat_id}"
 admin_text = (
