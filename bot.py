@@ -181,17 +181,17 @@ if step == 'waiting_photo_1':
         state_data['step'] = 'waiting_photo_2'
         bot.send_message(chat_id, "✅ 1-skrinshot qabul qilindi!\n\nEndi ovoz muvaffaqiyatli berilganini ko'rsatuvchi 2-skrinshotni yuboring:")
 
-    elif step == 'waiting_photo_2':
+elif step == 'waiting_photo_2':
         state_data['photo_2'] = message.message_id
         state_data['step'] = 'waiting_photo_3'
         bot.send_message(chat_id, "✅ 2-skrinshot qabul qilindi!\n\nVa nihoyat, telefoningizga Ochiq byudjetdan kelgan SMS xabarni (Tabriklaymiz, ovozingiz qabul qilindi) skrinshot qilib, 3-rasm sifatida yuboring:")
 
-    elif step == 'waiting_photo_3':
+elif step == 'waiting_photo_3':
         photo_1 = state_data.get('photo_1')
         photo_2 = state_data.get('photo_2')
         photo_3 = message.message_id
 
-        try:
+try:
             cursor.execute("INSERT INTO votes (phone, user_id, status) VALUES (?, ?, ?)", (phone, chat_id, 'completed'))
             conn.commit()
         except sqlite3.IntegrityError:
