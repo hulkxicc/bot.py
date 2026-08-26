@@ -150,7 +150,7 @@ bot.send_message(
         "🔄 _Sizning hamyoningiz balansi Nol (0) holatiga tushirildi._ Yana ovoz yig'ishda davom etishingiz mumkin!", 
         parse_mode="Markdown"
     )
-    user_states.pop(chat_id, None)
+user_states.pop(chat_id, None)
 
 # --------- OVOZ BERISH VA SKRINSHOTLAR ---------
 @bot.message_handler(func=lambda message: message.chat.id in user_states and user_states[message.chat.id].get('step') == 'waiting_phone')
