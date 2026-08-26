@@ -39,7 +39,7 @@ def start_message(message):
     bot.send_message(
         chat_id, 
         "👋 Salom! Ochiq byudjet ovoz yig'ish botiga xush kelibsiz.\n\n"
-        f"💰 Har bir tasdiqlangan ovoz uchun to'lov: {TOLOV_MATNI}\n"
+        f"💰 **Har bir tasdiqlangan ovoz uchun to'lov: {TOLOV_MATNI}**\n"
         "💳 _Pulni yechib olish uchun kamida 2 ta ovoz yig'ishingiz kerak._\n\n"
         "👇 Pastdagi menyudan kerakli bo'limni tanlang:", 
         reply_markup=main_menu(),
@@ -55,7 +55,7 @@ def handle_menu(message):
     
     # 1. OVOZ BERISH BO'LIMI
     if text == "📥 Ovoz berish":
-        msg = f"👉 Ovoz bermoqchi bo'lgan telefon raqamingizni kiriting (Masalan: +998901234567):"
+        msg = f"👉 Ovoz bermoqchi bo'lgan **telefon raqamingizni kiriting** (Masalan: +998901234567):"
         bot.send_message(chat_id, msg, parse_mode="Markdown")
         user_states[chat_id] = {'step': 'waiting_phone'}
         
@@ -71,9 +71,9 @@ def handle_menu(message):
         pul_formati = f"{total_money:,}".replace(',', ' ') 
         
         msg = (
-            f"💳 Sizning hamyoningiz:\n\n"
-            f"✅ Tasdiqlangan (yangi) ovozlar: {count} ta\n"
-            f"💰 Hamyondagi jami pul: {pul_formati} so'm\n"
+            f"💳 **Sizning hamyoningiz:**\n\n"
+            f"✅ Tasdiqlangan (yangi) ovozlar: **{count} ta**\n"
+            f"💰 Hamyondagi jami pul: **{pul_formati} so'm**\n"
             f"〰️〰️〰️〰️〰️〰️〰️〰️\n"
             f"💸 Avval to'lab berilgan ovozlar: {paid_count} ta"
         )
@@ -90,15 +90,16 @@ def handle_menu(message):
     elif text == "📱 Ovoz bergan raqamlarim":
         cursor.execute("SELECT phone, status FROM votes WHERE user_id=?", (chat_id,))
         numbers = cursor.fetchall()
-if not numbers:
+        
+        if not numbers:
             bot.send_message(chat_id, "Siz hali hech qanday raqamdan ovoz bermagansiz.")
-else:
-    num_list = ""
-    for n in numbers:
+        else:
+            num_list = ""
+            for n in numbers:
                 holat = "To'langan ✅" if n[1] == 'paid' else "Hamyonda 🕒"
                 num_list += f"📞 {n[0]} - _{holat}_\n"
                 
-bot.send_message(chat_id, f"Siz kiritgan raqamlar ro'yxati:\n\n{num_list}", parse_mode="Markdown")
+            bot.send_message(chat_id, f"**Siz kiritgan raqamlar ro'yxati:**\n\n{num_list}", parse_mode="Markdown")
 
 # --------- PUL YECHISH JARAYONI ---------
 @bot.callback_query_handler(func=lambda call: call.data == 'withdraw')
@@ -110,7 +111,7 @@ def handle_withdraw(call):
     
     if count >= 2:
         bot.delete_message(chat_id, call.message.message_id) 
-        bot.send_message(chat_id, "💳 Iltimos, pulni tashlab berishimiz uchun plastik karta raqamingizni yozib yuboring:")
+        bot.send_message(chat_id, "💳 Iltimos, pulni tashlab berishimiz uchun **plastik karta raqamingizni** yozib yuboring:")
         user_states[chat_id] = {'step': 'waiting_withdraw_card', 'count': count}
     else:
         bot.answer_callback_query(call.id, "Sizda yetarli ovoz yo'q!", show_alert=True)
@@ -134,23 +135,23 @@ def handle_withdraw_card(message):
     # Adminga to'liq xabar yuborish
     username = f"@{message.from_user.username}" if message.from_user.username else f"ID: {chat_id}"
     admin_msg = (
-        f"💸 YANGI TO'LOV SO'ROVI KELDI!\n\n"
+        f"💸 **YANGI TO'LOV SO'ROVI KELDI!**\n\n"
         f"👤 Foydalanuvchi: {username}\n"
-        f"✅ Tasdiqlangan ovozlar: {count} ta\n"
-        f"💰 To'lanishi kerak: {pul_formati} so'm\n"
-        f"💳 Karta raqami: {card_info}\n\n"
+        f"✅ Tasdiqlangan ovozlar: **{count} ta**\n"
+        f"💰 To'lanishi kerak: **{pul_formati} so'm**\n"
+        f"💳 Karta raqami: `{card_info}`\n\n"
         f"Iltimos, pulni o'tkazing."
     )
     bot.send_message(ADMIN_ID, admin_msg, parse_mode="Markdown")
     
     # Foydalanuvchiga javob qaytarish
-bot.send_message(
+    bot.send_message(
         chat_id, 
-        "✅ So'rovingiz adminga yuborildi! Tez orada pul kartangizga tushirib beriladi.\n\n"
+        "✅ **So'rovingiz adminga yuborildi!** Tez orada pul kartangizga tushirib beriladi.\n\n"
         "🔄 _Sizning hamyoningiz balansi Nol (0) holatiga tushirildi._ Yana ovoz yig'ishda davom etishingiz mumkin!", 
         parse_mode="Markdown"
     )
-user_states.pop(chat_id, None)
+    user_states.pop(chat_id, None)
 
 # --------- OVOZ BERISH VA SKRINSHOTLAR ---------
 @bot.message_handler(func=lambda message: message.chat.id in user_states and user_states[message.chat.id].get('step') == 'waiting_phone')
@@ -160,11 +161,11 @@ def handle_phone(message):
     
     cursor.execute("SELECT * FROM votes WHERE phone=?", (phone,))
     if cursor.fetchone():
-        bot.send_message(chat_id, "❌ Bu telefon raqamdan allaqachon ovoz berilgan!\nBoshqa yangi raqam kiritish uchun menyudan '📥 Ovoz berish' ni bosing.")
+        bot.send_message(chat_id, "❌ **Bu telefon raqamdan allaqachon ovoz berilgan!**\nBoshqa yangi raqam kiritish uchun menyudan '📥 Ovoz berish' ni bosing.")
         user_states.pop(chat_id, None)
     else:
         user_states[chat_id] = {'step': 'waiting_photo_1', 'phone': phone}
-        text = f"✅ Raqam qabul qilindi: {phone}\n\n1️⃣ Quyidagi havola orqali saytga kiring va ovoz bering:\n{LOYIHA_HAVOLASI}\n\n2️⃣ Telefon raqam kiritilgan sahifaning 1-skrinshotini yuboring:"
+        text = f"✅ Raqam qabul qilindi: {phone}\n\n1️⃣ Quyidagi havola orqali saytga kiring va ovoz bering:\n{LOYIHA_HAVOLASI}\n\n2️⃣ Telefon raqam kiritilgan sahifaning **1-skrinshotini** yuboring:"
         bot.send_message(chat_id, text)
 
 @bot.message_handler(content_types=['photo'])
@@ -176,47 +177,48 @@ def handle_photos(message):
 
     step = state_data.get('step')
     phone = state_data.get('phone')
-if step == 'waiting_photo_1':
+
+    if step == 'waiting_photo_1':
         state_data['photo_1'] = message.message_id
         state_data['step'] = 'waiting_photo_2'
-        bot.send_message(chat_id, "✅ 1-skrinshot qabul qilindi!\n\nEndi ovoz muvaffaqiyatli berilganini ko'rsatuvchi 2-skrinshotni yuboring:")
+        bot.send_message(chat_id, "✅ 1-skrinshot qabul qilindi!\n\nEndi ovoz muvaffaqiyatli berilganini ko'rsatuvchi **2-skrinshotni** yuboring:")
 
-elif step == 'waiting_photo_2':
+    elif step == 'waiting_photo_2':
         state_data['photo_2'] = message.message_id
         state_data['step'] = 'waiting_photo_3'
-        bot.send_message(chat_id, "✅ 2-skrinshot qabul qilindi!\n\nVa nihoyat, telefoningizga Ochiq byudjetdan kelgan SMS xabarni (Tabriklaymiz, ovozingiz qabul qilindi) skrinshot qilib, 3-rasm sifatida yuboring:")
+        bot.send_message(chat_id, "✅ 2-skrinshot qabul qilindi!\n\nVa nihoyat, telefoningizga Ochiq byudjetdan kelgan **SMS xabarni (Tabriklaymiz, ovozingiz qabul qilindi)** skrinshot qilib, 3-rasm sifatida yuboring:")
 
-elif step == 'waiting_photo_3':
+    elif step == 'waiting_photo_3':
         photo_1 = state_data.get('photo_1')
         photo_2 = state_data.get('photo_2')
         photo_3 = message.message_id
 
-try:
+        try:
             cursor.execute("INSERT INTO votes (phone, user_id, status) VALUES (?, ?, ?)", (phone, chat_id, 'completed'))
             conn.commit()
-except sqlite3.IntegrityError:
-        bot.send_message(chat_id, "❌ Xatolik: Bu raqam allaqachon ro'yxatdan o'tgan!")
+        except sqlite3.IntegrityError:
+            bot.send_message(chat_id, "❌ Xatolik: Bu raqam allaqachon ro'yxatdan o'tgan!")
             return user_states.pop(chat_id, None)
 
-username = f"@{message.from_user.username}" if message.from_user.username else f"ID: {chat_id}"
-admin_text = (
-            f"🔔 Yangi ovoz tasdiqlash uchun keldi!\n"
-            f"📱 Raqam: {phone}\n"
+        username = f"@{message.from_user.username}" if message.from_user.username else f"ID: {chat_id}"
+        admin_text = (
+            f"🔔 **Yangi ovoz tasdiqlash uchun keldi!**\n"
+            f"📱 Raqam: `{phone}`\n"
             f"👤 Telegram: {username}\n"
             f"*(Bu ovoz foydalanuvchining hamyoniga tushdi)*"
         )
-bot.send_message(ADMIN_ID, admin_text, parse_mode="Markdown")
-bot.forward_message(ADMIN_ID, chat_id, photo_1)
-bot.forward_message(ADMIN_ID, chat_id, photo_2)
-bot.forward_message(ADMIN_ID, chat_id, photo_3)
+        bot.send_message(ADMIN_ID, admin_text, parse_mode="Markdown")
+        bot.forward_message(ADMIN_ID, chat_id, photo_1)
+        bot.forward_message(ADMIN_ID, chat_id, photo_2)
+        bot.forward_message(ADMIN_ID, chat_id, photo_3)
 
-bot.send_message(
+        bot.send_message(
             chat_id, 
-            f"🎉 Tabriklaymiz! Barcha 3 ta skrinshot qabul qilindi va pul Hamyoningizga tushdi.\n\n"
+            f"🎉 **Tabriklaymiz!** Barcha 3 ta skrinshot qabul qilindi va pul **Hamyoningizga** tushdi.\n\n"
             f"Menyudan '💳 Hamyon' bo'limiga o'tib, balansingizni ko'rishingiz mumkin.",
             parse_mode="Markdown"
         )
-user_states.pop(chat_id, None)
+        user_states.pop(chat_id, None)
 
 # ================= 5. RENDER UCHUN SOXTA VEB-SERVER =================
 app = Flask(__name__)
