@@ -6,9 +6,7 @@ from flask import Flask
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 # ================= 1. BOT SOZLAMALARI =================
-TOKEN = 'Here is the token for bot Openbujet @openbujet0voz_bot:
-
-8009128157:AAE4i3zL0QU9s5YRF7hBr-NCdFc0ZHCK4_s'
+TOKEN = '8009128157:AAE4i3zL0QU9s5YRF7hBr-NCdFc0ZHCK4_s'
 ADMIN_ID = '7356340513'
 LOYIHA_HAVOLASI = "https://openbudget.uz/boards/initiatives/initiative/55/74807204-f411-47f9-b7c0-e1fd650f9be2"
 
