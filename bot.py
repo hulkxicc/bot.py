@@ -98,7 +98,7 @@ else:
                 holat = "To'langan ✅" if n[1] == 'paid' else "Hamyonda 🕒"
                 num_list += f"📞 {n[0]} - _{holat}_\n"
                 
-            bot.send_message(chat_id, f"Siz kiritgan raqamlar ro'yxati:\n\n{num_list}", parse_mode="Markdown")
+bot.send_message(chat_id, f"Siz kiritgan raqamlar ro'yxati:\n\n{num_list}", parse_mode="Markdown")
 
 # --------- PUL YECHISH JARAYONI ---------
 @bot.callback_query_handler(func=lambda call: call.data == 'withdraw')
@@ -144,7 +144,7 @@ def handle_withdraw_card(message):
     bot.send_message(ADMIN_ID, admin_msg, parse_mode="Markdown")
     
     # Foydalanuvchiga javob qaytarish
-    bot.send_message(
+bot.send_message(
         chat_id, 
         "✅ So'rovingiz adminga yuborildi! Tez orada pul kartangizga tushirib beriladi.\n\n"
         "🔄 _Sizning hamyoningiz balansi Nol (0) holatiga tushirildi._ Yana ovoz yig'ishda davom etishingiz mumkin!", 
