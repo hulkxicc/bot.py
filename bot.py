@@ -199,7 +199,7 @@ except sqlite3.IntegrityError:
 return user_states.pop(chat_id, None)
 
 username = f"@{message.from_user.username}" if message.from_user.username else f"ID: {chat_id}"
-        admin_text = (
+admin_text = (
             f"🔔 Yangi ovoz tasdiqlash uchun keldi!\n"
             f"📱 Raqam: {phone}\n"
             f"👤 Telegram: {username}\n"
@@ -210,13 +210,13 @@ username = f"@{message.from_user.username}" if message.from_user.username else f
         bot.forward_message(ADMIN_ID, chat_id, photo_2)
         bot.forward_message(ADMIN_ID, chat_id, photo_3)
 
-        bot.send_message(
+bot.send_message(
             chat_id, 
             f"🎉 Tabriklaymiz! Barcha 3 ta skrinshot qabul qilindi va pul Hamyoningizga tushdi.\n\n"
             f"Menyudan '💳 Hamyon' bo'limiga o'tib, balansingizni ko'rishingiz mumkin.",
             parse_mode="Markdown"
         )
-        user_states.pop(chat_id, None)
+user_states.pop(chat_id, None)
 
 # ================= 5. RENDER UCHUN SOXTA VEB-SERVER =================
 app = Flask(__name__)
