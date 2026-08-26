@@ -92,9 +92,9 @@ def handle_menu(message):
         numbers = cursor.fetchall()
 if not numbers:
             bot.send_message(chat_id, "Siz hali hech qanday raqamdan ovoz bermagansiz.")
-        else:
-            num_list = ""
-            for n in numbers:
+else:
+    num_list = ""
+    for n in numbers:
                 holat = "To'langan ✅" if n[1] == 'paid' else "Hamyonda 🕒"
                 num_list += f"📞 {n[0]} - _{holat}_\n"
                 
